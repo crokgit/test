@@ -3,35 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beep Button</title>
+    <title>Monero Payment QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
         }
-        button {
-            padding: 20px;
-            font-size: 20px;
-            cursor: pointer;
+        #qr-code {
+            margin-top: 20px;
+        }
+        #anime-girl {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px; /* Adjust size as needed */
         }
     </style>
 </head>
 <body>
-    <button id="beepButton">Press to Beep</button>
+    <h1>Monero Payment QR Code Generator</h1>
 
-    <audio id="beepSound" style="display: none;">
-        <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
+    <div>
+        <label for="address">Monero Address:</label>
+        <input type="text" id="address" placeholder="Enter your Monero address">
+    </div>
+    <div>
+        <label for="amount">Amount (XMR):</label>
+        <input type="number" id="amount" step="0.01" placeholder="Enter amount">
+    </div>
+    <button onclick="generateQRCode()">Generate QR Code</button>
+
+    <canvas id="qr-code"></canvas>
+
+    <img id="anime-girl" src="https://styles.redditmedia.com/t5_45zqb8/styles/communityIcon_ps1qclkwq1ea1.png" alt="Anime Girl">
 
     <script>
-        document.getElementById("beepButton").addEventListener("click", function() {
-            document.getElementById("beepSound").play();
-        });
+        function generateQRCode() {
+            const address = document.getElementById('address').value;
+            const amount = document.getElementById('amount').value;
+
+            if (!address) {
+                alert("Please enter a Monero address.");
+                return;
+            }
+
+            const uri = `monero:${address}?amount=${amount}`;
+
+            const qr = new QRious({
+                element: document.getElementById('qr-code'),
+                value: uri,
+                size: 200
+            });
+        }
     </script>
 </body>
 </html>
